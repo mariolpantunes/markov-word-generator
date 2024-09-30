@@ -4,6 +4,8 @@ import random
 from dataclasses import dataclass, field
 from enum import Enum
 
+import importlib.resources
+
 
 DELIMITER_END = '$'
 
@@ -92,7 +94,8 @@ class MarkovWordGenerator():
             else:
                 self.language = self.language.value
         if (self.dictionary_filename is None):
-            self.dictionary_filename = f"dictionaries/{self.language.upper()}-{self.word_type.value.lower()}s.dic"
+            MODULE_PATH = importlib.resources.files(__package__)
+            self.dictionary_filename = f"{MODULE_PATH}/dictionaries/{self.language.upper()}-{self.word_type.value.lower()}s.dic"
         with open(self.dictionary_filename) as list:
             for word in list:
                 word = '^' + word.lower().replace('\n', DELIMITER_END).replace('.', '')
